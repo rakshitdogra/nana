@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=0.8, minimum-scale=0.8, maximum-scale=1.2, viewport-fit=cover, user-scalable=yes" />
+    <title>Error - Paper Summary Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Newsreader:opsz@6..72&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      .error-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 40px 20px;
+        text-align: center;
+      }
+
+      .error-card {
+        max-width: 500px;
+        background: var(--card-muted);
+        border-radius: 24px;
+        border: 1px solid var(--border);
+        padding: 40px;
+        backdrop-filter: blur(12px) saturate(180%);
+        -webkit-backdrop-filter: blur(12px) saturate(180%);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      }
+
+      .error-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        opacity: 0.8;
+      }
+
+      .error-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: var(--text);
+      }
+
+      .error-message {
+        font-size: 1.1rem;
+        color: var(--muted);
+        margin-bottom: 32px;
+        line-height: 1.6;
+      }
+
+      .error-code {
+        font-family: 'Space Grotesk', monospace;
+        font-size: 0.9rem;
+        color: var(--accent-2);
+        background: rgba(54, 246, 196, 0.1);
+        padding: 8px 16px;
+        border-radius: 12px;
+        margin-bottom: 32px;
+        border: 1px solid rgba(54, 246, 196, 0.2);
+      }
+
+      .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: center;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 14px 24px;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 500;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        min-width: 140px;
+      }
+
+      .btn-primary {
+        background: var(--accent-2);
+        color: var(--background);
+      }
+
+      .btn-primary:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+      }
+
+      .btn-secondary {
+        background: var(--card-muted);
+        color: var(--text);
+        border: 1px solid var(--border);
+      }
+
+      .btn-secondary:hover {
+        background: var(--card);
+        transform: translateY(-1px);
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 480px) {
+        .error-container {
+          padding: 20px 16px;
+        }
+
+        .error-card {
+          padding: 30px 20px;
+        }
+
+        .error-title {
+          font-size: 1.5rem;
+        }
+
+        .error-message {
+          font-size: 1rem;
+        }
+
+        .action-buttons {
+          width: 100%;
+        }
+
+        .btn {
+          width: 100%;
+        }
+      }
+
+      /* Theme support */
+      :root[data-theme="light"] .error-card {
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      :root[data-theme="light"] .error-code {
+        background: rgba(54, 246, 196, 0.1);
+        border: 1px solid rgba(54, 246, 196, 0.3);
+      }
+    </style>
+  </head>
+  <body style="margin: 0; padding: 0; overflow-x: hidden; -webkit-overflow-scrolling: touch; min-height: 100vh;">
+    <button id="themeToggle" class="theme-toggle theme-toggle--floating" aria-label="Toggle color theme">☀️</button>
+    
+    <div class="error-container">
+      <div class="error-card">
+        <div class="error-icon">⚠️</div>
+        <h1 class="error-title" id="errorTitle">Something went wrong</h1>
+        <p class="error-message" id="errorMessage">
+          We encountered an unexpected error. Please try again or contact support if the problem persists.
+        </p>
+        <div class="error-code" id="errorCode" style="display: none;">
+          Error Code: <span id="errorNumber">500</span>
+        </div>
+        
+        <div class="action-buttons">
+          <button class="btn btn-primary" onclick="goHome()">Go Home</button>
+          <button class="btn btn-secondary" onclick="goBack()">Go Back</button>
+        </div>
+      </div>
+    </div>
+
+    <footer style="position: fixed; bottom: 0; left: 0; right: 0; backdrop-filter: blur(8px) saturate(1.2); padding: 12px 0; border-top: 1px solid var(--border, rgba(0, 0, 0, 0.05)); font-size: 0.8rem; color: grey !important; width: 100%; z-index: 1000; background: rgba(255, 255, 255, 0.15);">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: center; align-items: center; height: 100%;">
+        <p style="margin: 0; text-align: center; line-height: 1.4;">
+          © 2026 rakshitdogra. Built with ☕️ by <a href="https://linkedin.com/in/rakshitdogra" target="_blank" rel="noopener" style="color: var(--accent-2); text-decoration: none; font-weight: 500; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Rakshit Dogra</a>
+        </p>
+      </div>
+      <style>
+        /* Light mode styles */
+        @media (prefers-color-scheme: light) {
+          footer {
+            background: rgba(255, 255, 255, 0.15) !important;
+            border-top-color: rgba(0, 0, 0, 0.05) !important;
+            color: var(--text-muted, #666) !important;
+            backdrop-filter: blur(8px) saturate(1.2);
+          }
+        }
+        
+        /* Dark mode styles */
+        @media (prefers-color-scheme: dark) {
+          footer {
+            background: rgba(15, 17, 21, 0.15) !important;
+            border-top-color: rgba(255, 255, 255, 0.05) !important;
+            color: var(--text-muted, #97a0c3) !important;
+            backdrop-filter: blur(8px) saturate(1.2);
+          }
+        }
+      </style>
+    </footer>
+
+    <script>
+      // Theme management
+      function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('gps-theme', theme);
+        themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      }
+
+      function hydrateTheme() {
+        const saved = localStorage.getItem('gps-theme') || 'dark';
+        setTheme(saved);
+      }
+
+      function toggleTheme() {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'light' ? 'dark' : 'light';
+        setTheme(next);
+      }
+
+      // Navigation functions
+      function goHome() {
+        window.location.href = '/';
+      }
+
+      function goBack() {
+        window.history.back();
+      }
+
+      // Parse URL parameters for error details
+      function parseErrorParams() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const errorType = urlParams.get('type');
+        const errorCode = urlParams.get('code');
+        const message = urlParams.get('message');
+
+        if (errorType || errorCode || message) {
+          updateErrorDisplay(errorType, errorCode, message);
+        }
+      }
+
+      function updateErrorDisplay(type, code, message) {
+        const titleEl = document.getElementById('errorTitle');
+        const messageEl = document.getElementById('errorMessage');
+        const codeEl = document.getElementById('errorCode');
+        const codeNumberEl = document.getElementById('errorNumber');
+
+        switch(type) {
+          case '404':
+            titleEl.textContent = 'Page Not Found';
+            messageEl.textContent = 'The page you\'re looking for doesn\'t exist or has been moved.';
+            break;
+          case '401':
+            titleEl.textContent = 'Authentication Required';
+            messageEl.textContent = 'Please log in to access this page.';
+            break;
+          case '403':
+            titleEl.textContent = 'Access Denied';
+            messageEl.textContent = 'You don\'t have permission to access this resource.';
+            break;
+          case '500':
+            titleEl.textContent = 'Server Error';
+            messageEl.textContent = 'Something went wrong on our end. Please try again later.';
+            break;
+          default:
+            if (message) {
+              messageEl.textContent = decodeURIComponent(message);
+            }
+        }
+
+        if (code) {
+          codeNumberEl.textContent = code;
+          codeEl.style.display = 'block';
+        }
+      }
+
+      // Initialize
+      document.addEventListener('DOMContentLoaded', () => {
+        hydrateTheme();
+        parseErrorParams();
+        
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', toggleTheme);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paper Summary Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Newsreader:opsz@6..72&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      :root {
+        --max-width: 1200px;
+        --spacing: 24px;
+        --border-radius: 20px;
+      }
+      
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow-y: auto;
+      }
+      
+      body {
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .app-container {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        max-width: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      
+      main.shell {
+        flex: 1;
+        padding: var(--spacing);
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing);
+        max-width: var(--max-width);
+        width: 100%;
+        margin: 0 auto;
+      }
+      
+      .panel {
+        margin-bottom: var(--spacing);
+      }
+      
+      /* Hero Section */
+      .hero {
+        margin: 10px 0 20px;
+      }
+      
+      .hero-content {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0;
+        position: relative;
+      }
+      
+      .hero-text {
+        flex: 1;
+        padding-left: 140px; /* Make space for the stats capsule */
+      }
+      
+      .stats {
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: inline-flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 10px 12px;
+        background: var(--card-muted);
+        border-radius: 24px;
+        border: 1px solid var(--border);
+        min-width: auto;
+        margin: 0;
+      }
+      
+      .stats div {
+        display: inline-block;
+        text-align: center;
+        padding: 0 8px;
+      }
+      
+      .stats div:not(:last-child) {
+        border-right: 1px solid var(--border);
+      }
+      
+      .stats span {
+        display: block;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--accent-2);
+        line-height: 1.2;
+      }
+      
+      .stats small {
+        color: var(--muted);
+        font-size: 0.7rem;
+        display: block;
+        white-space: nowrap;
+      }
+      
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .hero-content {
+          flex-direction: column;
+          gap: 16px;
+          padding-top: 50px;
+        }
+        
+        .hero-text {
+          padding-left: 0;
+        }
+        
+        .stats {
+          position: absolute;
+          top: 0;
+          left: 16px; /* Align to the left edge */
+          transform: none; /* Remove centering */
+          flex-direction: row;
+          justify-content: flex-start; /* Align items to the start */
+          padding: 4px 10px;
+          width: auto;
+          border-radius: 16px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .stats div {
+          padding: 0 10px;
+          white-space: nowrap;
+        }
+      }
+      
+      @media (max-width: 768px) {
+        :root {
+          --spacing: 16px;
+        }
+        
+        .app-bar {
+          margin-top: 12px;
+          padding: 8px 16px;
+        }
+        
+        .panel {
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container" style="padding-bottom: 80px;">
+      <div class="app-bar-wrapper">
+        <header class="app-bar">
+          <button id="logoutBtn" class="ghost-btn ghost-btn--solid">Log out</button>
+          <div class="app-bar__greeting">
+            <strong id="userGreeting">Loading user…</strong>
+          </div>
+          <button id="themeToggle" class="theme-toggle" aria-label="Toggle color theme">☀️</button>
+        </header>
+      </div>
+      <main class="shell">
+      <header class="hero">
+        <div class="hero-content">
+          <div class="hero-text">
+            <p class="eyebrow">A product by ralvmedia</p>
+            <h1>Research summaries at a glance</h1>
+            <p class="lede">
+              helps you quickly understand research papers by turning PDFs into clear, structured summaries.
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <section class="panel upload-panel">
+        <div class="panel-header">
+          <h2>Upload papers</h2>
+          <p>Upload multiple papers, get key insights, limitations & open questions.</p>
+        </div>
+        <div id="dropZone" class="dropzone" tabindex="0">
+          <input id="pdfInput" type="file" accept="application/pdf" multiple />
+          <div class="dropzone-copy">
+            <p>Drag PDFs here or <button id="browseBtn" type="button">browse</button></p>
+            <small>All processing is done server-side; only plain text leaves the PDF.</small>
+          </div>
+        </div>
+        <ul id="fileList" class="file-list" aria-live="polite"></ul>
+        <div class="actions">
+          <button id="analyzeBtn" disabled>Analyze Papers</button>
+          <span id="statusText" role="status"></span>
+        </div>
+      </section>
+
+      <section class="panel results-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Summaries</h2>
+            <p>Results stream in per paper; download raw text for citation scrapes or QA pipelines.</p>
+          </div>
+          <button id="downloadReportBtn" class="secondary" style="display: none;">Download Report</button>
+        </div>
+        <div id="results" class="results" aria-live="polite">
+          <div class="placeholder">
+            <p>No summaries yet. Upload a few PDFs to see structured output.</p>
+          </div>
+        </div>
+      </section>
+      </main>
+    </div>
+
+    <footer style="position: fixed; bottom: 0; left: 0; right: 0; backdrop-filter: blur(10px); padding: 8px 0; border-top: 1px solid; font-size: 0.75rem; color: #6c757d; width: 100%;">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 0 12px; display: flex; flex-direction: column; gap: 4px; align-items: center;">
+        <p style="margin: 0; text-align: center; line-height: 1.3;">
+          © 2026 rakshitdogra. Built with ☕️ by <a href="https://linkedin.com/in/rakshitdogra" target="_blank" rel="noopener" style="color: #007c72; text-decoration: none; font-size: 0.7rem;">Rakshit Dogra</a>
+        </p>
+        <p style="margin: 0; font-size: 0.7rem; opacity: 0.8; line-height: 1.2;">
+          Powered by Google Gemini AI
+        </p>
+      </div>
+      <style>
+        @media (min-width: 600px) {
+          footer > div {
+            flex-direction: row !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            padding: 0 16px !important;
+            height: 32px;
+          }
+          footer p {
+            text-align: left !important;
+            margin: 0 !important;
+            line-height: 1.2 !important;
+          }
+        }
+      </style>
+    </footer>
+
+    <template id="resultTemplate">
+      <article class="result-card">
+        <header>
+          <div>
+            <h3 class="paper-name"></h3>
+            <p class="meta"></p>
+          </div>
+          <a class="text-link" target="_blank" rel="noopener">TXT export</a>
+        </header>
+        <p class="summary"></p>
+        <div class="grid">
+          <div>
+            <h4>Key points</h4>
+            <ul class="bullets"></ul>
+          </div>
+          <div>
+            <h4>Limitations</h4>
+            <p class="limitations"></p>
+          </div>
+        </div>
+        <div class="grid">
+          <div>
+            <h4>Novelty</h4>
+            <p class="novelty"></p>
+          </div>
+          <div>
+            <h4>Next questions</h4>
+            <ul class="questions"></ul>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
